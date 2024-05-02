@@ -100,13 +100,15 @@ AprilTagNode::AprilTagNode(const rclcpp::NodeOptions& options)
     // topics
     sub_cam(image_transport::create_camera_subscription(
         this,
-        this->get_node_topics_interface()->resolve_topic_name("image_rect"),
+        // this->get_node_topics_interface()->resolve_topic_name("image_rect"),
+        "/image_raw",
         std::bind(&AprilTagNode::onCamera, this, std::placeholders::_1, std::placeholders::_2),
         declare_parameter("image_transport", "raw", descr({}, true)),
         rmw_qos_profile_sensor_data)),
     pub_detections(create_publisher<apriltag_msgs::msg::AprilTagDetectionArray>("detections", rclcpp::QoS(1))),
     tf_broadcaster(this)
 {
+    RCLCPP_INFO(get_logger(), "Starting apriltag node");
     // read-only parameters
     const std::string tag_family = declare_parameter("family", "36h11", descr("tag family", true));
     tag_edge_size = declare_parameter("size", 1.0, descr("default tag size", true));
@@ -223,6 +225,7 @@ void AprilTagNode::onCamera(const sensor_msgs::msg::Image::ConstSharedPtr& msg_i
         }
 
         tfs.push_back(tf);
+        RCLCPP_INFO(get_logger(), "detect tag %d", det->id);
     }
 
     pub_detections->publish(msg_detections);

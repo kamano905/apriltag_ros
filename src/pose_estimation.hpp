@@ -3,6 +3,7 @@
 #include <apriltag/apriltag.h>
 #include <geometry_msgs/msg/transform_stamped.hpp>
 #include <unordered_map>
+#include <functional>
 
 
 typedef std::function<geometry_msgs::msg::Transform(apriltag_detection_t* const, const std::array<double, 4>&, const double&)> pose_estimation_f;
