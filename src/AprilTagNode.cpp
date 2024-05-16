@@ -102,6 +102,7 @@ AprilTagNode::AprilTagNode(const rclcpp::NodeOptions& options)
         this,
         // this->get_node_topics_interface()->resolve_topic_name("image_rect"),
         "/image_raw",
+        // "/apriltag/image_rect",
         std::bind(&AprilTagNode::onCamera, this, std::placeholders::_1, std::placeholders::_2),
         declare_parameter("image_transport", "raw", descr({}, true)),
         rmw_qos_profile_sensor_data)),
